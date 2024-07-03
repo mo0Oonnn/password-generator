@@ -14,7 +14,7 @@ import (
 
 func CreateGeneratePasswordHandler(log *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		const operation = "handlers.CreateMakePasswordHandler"
+		const operation = "handlers.CreateGeneratePasswordHandler"
 
 		log = log.With(
 			slog.String("operation", operation),
@@ -29,9 +29,10 @@ func CreateGeneratePasswordHandler(log *slog.Logger) http.HandlerFunc {
 			return
 		}
 
-		password := random.CreateRandomPassword(sizeInt)
+		useSpecialChars := chi.URLParam(r, "useSpecialChars") == "true"
 
-		log.Info("password generated")
-		response.PasswordResponseOK(w, r, password, sizeInt)
+		password := random.CreateRandomPassword(sizeInt, useSpecialChars)
+
+		response.PasswordResponseOK(w, r, password, sizeInt, useSpecialChars)
 	}
 }

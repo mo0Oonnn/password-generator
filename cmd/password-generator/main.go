@@ -46,18 +46,13 @@ func setupLogger(environment string) *slog.Logger {
 		log.Fatalf("error creating logs file: %v", err)
 	}
 
-	switch environment {
-	case envLocal:
+	if environment == envLocal {
 		logger = slog.New(
-			slog.NewTextHandler(logsFile, &slog.HandlerOptions{Level: slog.LevelDebug}),
+			slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}),
 		)
-	case envDev:
+	} else if environment == envDev || environment == envProd {
 		logger = slog.New(
 			slog.NewJSONHandler(logsFile, &slog.HandlerOptions{Level: slog.LevelDebug}),
-		)
-	case envProd:
-		logger = slog.New(
-			slog.NewJSONHandler(logsFile, &slog.HandlerOptions{Level: slog.LevelInfo}),
 		)
 	}
 

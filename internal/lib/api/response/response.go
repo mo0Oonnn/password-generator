@@ -13,8 +13,9 @@ type Response struct {
 
 type PasswordResponse struct {
 	Response
-	Password string `json:"password"`
-	Size     int    `json:"size"`
+	Password        string `json:"password"`
+	Size            int    `json:"size"`
+	UseSpecialChars bool   `json:"useSpecialChars"`
 }
 
 const (
@@ -35,10 +36,11 @@ func Error(msg string) Response {
 	}
 }
 
-func PasswordResponseOK(w http.ResponseWriter, r *http.Request, password string, size int) {
+func PasswordResponseOK(w http.ResponseWriter, r *http.Request, password string, size int, useSpecialChars bool) {
 	render.JSON(w, r, PasswordResponse{
-		Response: OK(),
-		Password: password,
-		Size:     size,
+		Response:        OK(),
+		Password:        password,
+		Size:            size,
+		UseSpecialChars: useSpecialChars,
 	})
 }
