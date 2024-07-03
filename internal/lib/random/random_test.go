@@ -14,4 +14,12 @@ func TestCreateRandomPassword(t *testing.T) {
 	if password == "" {
 		t.Errorf("password is empty")
 	}
+
+	password = random.CreateRandomPassword(10, true)
+	if len(password) != 10 {
+		t.Errorf("invalid password length")
+	}
+	if password == "" {
+		t.Errorf("password is empty")
+	}
 }

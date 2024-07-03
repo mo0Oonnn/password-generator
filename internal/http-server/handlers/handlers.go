@@ -29,10 +29,16 @@ func CreateGeneratePasswordHandler(log *slog.Logger) http.HandlerFunc {
 			return
 		}
 
-		useSpecialChars := chi.URLParam(r, "useSpecialChars") == "true"
+		useSpecialChars := chi.URLParam(r, "useSpecialChars")
+		if useSpecialChars != "false" && useSpecialChars != "true" {
+			log.Info("invalid request")
+			render.JSON(w, r, response.Error("invalid request"))
+			return
+		}
+		useSpecialCharsBool := useSpecialChars == "true"
 
-		password := random.CreateRandomPassword(sizeInt, useSpecialChars)
+		password := random.CreateRandomPassword(sizeInt, useSpecialCharsBool)
 
-		response.PasswordResponseOK(w, r, password, sizeInt, useSpecialChars)
+		response.PasswordResponseOK(w, r, password, sizeInt, useSpecialCharsBool)
 	}
 }
